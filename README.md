@@ -7,7 +7,7 @@ Object detecting is attracting interest of many researchers and deep learning en
 ## Task members
 The details of proposed models as well as the tasks of corresponding members in our group are as follow:
 1. Accuracy-improved models:
-- Dao Van Tung: Fast-R-CNN
+- Dao Van Tung: Faster R-CNN
 - Bui Thanh Tung: SSD
 - Pham Vu Huyen Trang: YOLO
 - Le Duc Anh Tuan: DERT
