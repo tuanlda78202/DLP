@@ -1,5 +1,5 @@
 # Object Detection on PASCAL VOC 2012
-| ![Architecture](https://drive.google.com/file/d/18RG__Yv3lBVeBdL4myqR1qHwrVQu-lUg/view?usp=sharing) | 
+| ![Architecture](https://github.com/tuanlda78202/DLP/blob/master/cover.png) | 
 |:--:| 
 | Mindmap ODPV12|
 ## Abstract
