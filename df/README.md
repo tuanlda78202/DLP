@@ -1,15 +1,32 @@
-**DETR**: End-to-End Object Detection with Transformers
-========
-PyTorch training code and pretrained models for **DETR** (**DE**tection **TR**ansformer).
-DETR replace the full complex hand-crafted object detection pipeline with a Transformer, and match Faster R-CNN with a ResNet-50, obtaining **68 AP** on PASCAL VOC 2012. Inference in 50 lines of PyTorch.
+<p align="center">
 
-![DETR](.github/DETR.png)
+  <h1 align="center">DETR: End-to-End Object Detection with Transformers</h1>
+
+  <h2 align="center">ECCV 2020</h2>
+  <div align="center">
+    <img src="https://github.com/tuanlda78202/DLP/blob/master/df/materials/DETR.png" alt="Logo" width="100%">
+  </div>
+
+  <p align="center">
+  <br>
+    <a href='https://colab.research.google.com/drive/1OVwwdWi6C7kje_k_8vtZVL7_3s5a5s7v?authuser=4#scrollTo=GOmj90akyjKB' style='padding-left: 0.5rem;'><img src='https://colab.research.google.com/assets/colab-badge.svg' alt='Google Colab'></a>
+    <a href='https://arxiv.org/abs/2005.12872'>
+      <img src='https://img.shields.io/badge/Paper-PDF-green?style=for-the-badge&logo=arXiv&logoColor=green' alt='Paper PDF'>
+    </a>
+  </p>
+</p>
+
+<br />
+<br />
+
+PyTorch training code and pretrained models for **DETR** (**DE**tection **TR**ansformer).
+DETR replace the full complex hand-crafted object detection pipeline with a Transformer, and match Faster R-CNN with a ResNet-50, obtaining **67.8 AP** on PASCAL VOC 2012. Inference in 50 lines of PyTorch.
 
 **What it is**. Unlike traditional computer vision techniques, DETR approaches object detection as a direct set prediction problem. It consists of a set-based global loss, which forces unique predictions via bipartite matching, and a Transformer encoder-decoder architecture. 
 Given a fixed small set of learned object queries, DETR reasons about the relations of the objects and the global image context to directly output the final set of predictions in parallel. Due to this parallel nature, DETR is very fast and efficient.
 
 **About the code**. I believe that object detection should not be more difficult than classification,
-and should not require complex libraries for training and inference.
+and should not require complex libraries for training and inference. DETR is very simple to implement and experiment with, and I provide a
 DETR is very simple to implement and experiment with, and I provide a
 [Colab Notebook](https://colab.research.google.com/drive/1OVwwdWi6C7kje_k_8vtZVL7_3s5a5s7v?authuser=4#scrollTo=GOmj90akyjKB)
 showing how to training & inference with DETR.
@@ -18,8 +35,7 @@ For details see [End-to-End Object Detection with Transformers](https://ai.faceb
 
 # Model Zoo
 
-I provide finetuned DETR models, and plan to include more in future.
-AP is computed on PASVOC 2012val
+I provide finetuned DETR models, and plan to include more in future. AP is computed on PASVOC 2012val
 
 <table>
   <thead>
@@ -48,7 +64,7 @@ AP is computed on PASVOC 2012val
       <td>40</td>
       <td>4:03:58</td>
       <td>A100</td>
-      <td>67.5</td>
+      <td><b>67.5<b></td>
       <td>50.1</td>
       <td>47.3</td>
       <td>10.7</td>
