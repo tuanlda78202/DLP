@@ -4,8 +4,9 @@
 
   <h2 align="center">ECCV 2020</h2>
   <div align="center">
-    <img src="https://github.com/tuanlda78202/DLP/blob/master/df/materials/DETR.png" alt="Logo" width="100%">
+    <img src="https://github.com/tuanlda78202/DLP/blob/master/df/materials%20/DETR.png" alt="Logo" width="100%">
   </div>
+  
 
   <p align="center">
   <br>
@@ -95,14 +96,14 @@ model.load_state_dict(checkpoint['model'],
 ## Tracking Loss 
 Solid lines for training and dashed line for validation results
 
-| ![Architecture](https://github.com/tuanlda78202/DLP/blob/master/df/materials/lossmAP.png) | 
+| ![Architecture](https://github.com/tuanlda78202/DLP/blob/master/df/materials%20/lossmAP.png) | 
 |:--:| 
 | Total loss & mAP 40e|
 
-| ![Architecture](https://github.com/tuanlda78202/DLP/blob/master/df/materials/cebboxgiou.png) | 
+| ![Architecture](https://github.com/tuanlda78202/DLP/blob/master/df/materials%20/cebboxgiou.png) | 
 |:--:| 
 | Loss CE, BB & GIoU 40e|
 
-| ![Architecture](https://github.com/tuanlda78202/DLP/blob/master/df/materials/clcaerror.png) | 
+| ![Architecture](https://github.com/tuanlda78202/DLP/blob/master/df/materials%20/clcaerror.png) | 
 |:--:| 
 | Class Error & Cardinality Error Unscaled 40e|
