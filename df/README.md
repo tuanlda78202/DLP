@@ -107,3 +107,8 @@ Solid lines for training and dashed line for validation results
 | ![Architecture](https://github.com/tuanlda78202/DLP/blob/master/df/materials%20/clcaerror.png) | 
 |:--:| 
 | Class Error & Cardinality Error Unscaled 40e|
+
+
+## Acknowlegments
+This project builds on previous works code base such as [DETR](https://github.com/facebookresearch/detr). If you found my project useful please consider citing these works as well.
+
