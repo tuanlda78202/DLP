@@ -28,7 +28,7 @@ Given a fixed small set of learned object queries, DETR reasons about the relati
 
 **About the code**. I believe that object detection should not be more difficult than classification,
 and should not require complex libraries for training and inference. DETR is very simple to implement and experiment with, and I provide a
-DETR is very simple to implement and experiment with, and I provide a
+DETR is very simple to implement and experiment with, and provide a
 [Colab Notebook](https://colab.research.google.com/drive/1OVwwdWi6C7kje_k_8vtZVL7_3s5a5s7v?authuser=4#scrollTo=GOmj90akyjKB)
 showing how to training & inference with DETR.
 
