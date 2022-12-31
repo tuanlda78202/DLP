@@ -67,12 +67,13 @@ class PredictionConvolutions(nn.Module):
     def forward(self, p3_feats, p4_feats, p5_feats, p6_feats, p7_feats, p8_feats, p9_feats):
         """
         Forward propagation.
-        :param p3_feats: p3 feature map, a tensor of dimensions (N, 512, 38, 38)
-        :param p4_feats: p4 feature map, a tensor of dimensions (N, 1024, 19, 19)
-        :param p5_feats: p5 feature map, a tensor of dimensions (N, 512, 10, 10)
+        :param p3_feats: p3 feature map, a tensor of dimensions (N, 256, 38, 38)
+        :param p4_feats: p4 feature map, a tensor of dimensions (N, 256, 19, 19)
+        :param p5_feats: p5 feature map, a tensor of dimensions (N, 256, 8, 8)
         :param p6_feats: p6 feature map, a tensor of dimensions (N, 256, 5, 5)
         :param p7_feats: p7 feature map, a tensor of dimensions (N, 256, 3, 3)
-        :param p8_feats: p8 feature map, a tensor of dimensions (N, 256, 1, 1)
+        :param p8_feats: p5 feature map, a tensor of dimensions (N, 256, 2, 2)
+        :param p9_feats: p8 feature map, a tensor of dimensions (N, 256, 1, 1)
         :return: 8732 locations and class scores (i.e. w.r.t each prior box) for each image
         """
         batch_size = p3_feats.size(0)
@@ -87,21 +88,21 @@ class PredictionConvolutions(nn.Module):
         l_p4 = l_p4.permute(0, 2, 3, 1).contiguous()  # (N, 19, 19, 24)
         l_p4 = l_p4.view(batch_size, -1, 4)  # (N, 2166, 4), there are a total 2116 boxes on this feature map
 
-        l_p5 = self.loc_p5(p5_feats)  # (N, 24, 10, 10)
-        l_p5 = l_p5.permute(0, 2, 3, 1).contiguous()  # (N, 10, 10, 24)
-        l_p5 = l_p5.view(batch_size, -1, 4)  # (N, 600, 4)
+        l_p5 = self.loc_p5(p5_feats)  # (N, 24, 8, 8)
+        l_p5 = l_p5.permute(0, 2, 3, 1).contiguous()  # (N, 8, 8, 24)
+        l_p5 = l_p5.view(batch_size, -1, 4)  # (N, 384, 4)
 
         l_p6 = self.loc_p6(p6_feats)  # (N, 24, 5, 5)
         l_p6 = l_p6.permute(0, 2, 3, 1).contiguous()  # (N, 5, 5, 24)
-        l_p6 = l_p6.view(batch_size, -1, 4)  # (N, 150, 4)
+        l_p6 = l_p6.view(batch_size, -1, 4)  # (N, 100, 4)
 
         l_p7 = self.loc_p7(p7_feats)  # (N, 16, 3, 3)
         l_p7 = l_p7.permute(0, 2, 3, 1).contiguous()  # (N, 3, 3, 16)
         l_p7 = l_p7.view(batch_size, -1, 4)  # (N, 36, 4)
 
         l_p8 = self.loc_p8(p8_feats)  # (N, 16, 1, 1)
-        l_p8 = l_p8.permute(0, 2, 3, 1).contiguous()  # (N, 1, 1, 16)
-        l_p8 = l_p8.view(batch_size, -1, 4)  # (N, 4, 4)
+        l_p8 = l_p8.permute(0, 2, 3, 1).contiguous()  # (N, 2, 2, 16)
+        l_p8 = l_p8.view(batch_size, -1, 4)  # (N, 16, 4)
         
         l_p9 = self.loc_p9(p9_feats)  # (N, 16, 1, 1)
         l_p9 = l_p9.permute(0, 2, 3, 1).contiguous()  # (N, 1, 1, 16)
@@ -117,21 +118,21 @@ class PredictionConvolutions(nn.Module):
         c_p4 = c_p4.view(batch_size, -1,
                                self.n_classes)  # (N, 2166, n_classes), there are a total 2116 boxes on this feature map
 
-        c_p5 = self.cl_p5(p5_feats)  # (N, 6 * n_classes, 10, 10)
+        c_p5 = self.cl_p5(p5_feats)  # (N, 6 * n_classes, 8, 8)
         c_p5 = c_p5.permute(0, 2, 3, 1).contiguous()  # (N, 10, 10, 6 * n_classes)
-        c_p5 = c_p5.view(batch_size, -1, self.n_classes)  # (N, 600, n_classes)
+        c_p5 = c_p5.view(batch_size, -1, self.n_classes)  # (N, 384, n_classes)
 
         c_p6 = self.cl_p6(p6_feats)  # (N, 6 * n_classes, 5, 5)
         c_p6 = c_p6.permute(0, 2, 3, 1).contiguous()  # (N, 5, 5, 6 * n_classes)
-        c_p6 = c_p6.view(batch_size, -1, self.n_classes)  # (N, 150, n_classes)
+        c_p6 = c_p6.view(batch_size, -1, self.n_classes)  # (N, 100, n_classes)
 
         c_p7 = self.cl_p7(p7_feats)  # (N, 4 * n_classes, 3, 3)
         c_p7 = c_p7.permute(0, 2, 3, 1).contiguous()  # (N, 3, 3, 4 * n_classes)
         c_p7 = c_p7.view(batch_size, -1, self.n_classes)  # (N, 36, n_classes)
 
-        c_p8 = self.cl_p8(p8_feats)  # (N, 4 * n_classes, 1, 1)
-        c_p8 = c_p8.permute(0, 2, 3, 1).contiguous()  # (N, 1, 1, 4 * n_classes)
-        c_p8 = c_p8.view(batch_size, -1, self.n_classes)  # (N, 4, n_classes)
+        c_p8 = self.cl_p8(p8_feats)  # (N, 4 * n_classes, 2, 2)
+        c_p8 = c_p8.permute(0, 2, 3, 1).contiguous()  # (N, 2, 2, 4 * n_classes)
+        c_p8 = c_p8.view(batch_size, -1, self.n_classes)  # (N, 16, n_classes)
         
         c_p9 = self.cl_p9(p9_feats)  # (N, 16, 1, 1)
         c_p9 = c_p9.permute(0, 2, 3, 1).contiguous()  # (N, 1, 1, 16)
@@ -139,7 +140,7 @@ class PredictionConvolutions(nn.Module):
 
         # A total of 8732 boxes
         # Concatenate in this specific order (i.e. must match the order of the prior-boxes)
-        locs = torch.cat([l_p3, l_p4, l_p5, l_p6, l_p7, l_p8, l_p9], dim=1)  # (N, 8732, 4)
-        classes_scores = torch.cat([c_p3, c_p4, c_p5, c_p6, c_p7, c_p8, c_p9], dim=1)  # (N, 8732, n_classes)
+        locs = torch.cat([l_p3, l_p4, l_p5, l_p6, l_p7, l_p8, l_p9], dim=1)  # (N, 8478, 4)
+        classes_scores = torch.cat([c_p3, c_p4, c_p5, c_p6, c_p7, c_p8, c_p9], dim=1)  # (N, 8478, n_classes)
 
         return locs, classes_scores

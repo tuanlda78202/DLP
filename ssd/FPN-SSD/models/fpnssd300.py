@@ -11,7 +11,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class SSD300(nn.Module):
     """
-    The SSD300 network - encapsulates the base VGG network, auxiliary, and prediction convolutions.
+    The SSD300 network - encapsulates the base FPM network and prediction convolutions.
     """
 
     def __init__(self, n_classes):
@@ -22,9 +22,7 @@ class SSD300(nn.Module):
         self.base = FPNBase()
         self.pred_convs = PredictionConvolutions(n_classes)
 
-        # Since lower level features (p3_feats) have considerably larger scales, we take the L2 norm and rescale
-        # Rescale factor is initially set at 20, but is learned for each channel during back-prop
-        self.rescale_factors = nn.Parameter(torch.FloatTensor(1, 256, 1, 1))  # there are 512 channels in p3_feats
+        self.rescale_factors = nn.Parameter(torch.FloatTensor(1, 256, 1, 1))  # there are 256 channels in p3_feats
         nn.init.constant_(self.rescale_factors, 20)
 
         # Prior boxes
@@ -37,24 +35,24 @@ class SSD300(nn.Module):
         :return: 8732 locations and class scores (i.e. w.r.t each prior box) for each image
         """
         # Run FPN base network convolutions (lower level feature map generators)
-        p3_feats, p4_feats, p5_feats, p6_feats, p7_feats, p8_feats, p9_feats = self.base(image)  # (N, 512, 38, 38), (N, 1024, 19, 19)
+        p3_feats, p4_feats, p5_feats, p6_feats, p7_feats, p8_feats, p9_feats = self.base(image)  # (N, 256, 38, 38), (N, 256, 19, 19)
 
         # Rescale p3 after L2 norm
         norm = p3_feats.pow(2).sum(dim=1, keepdim=True).sqrt()  # (N, 1, 38, 38)
-        p3_feats = p3_feats / norm  # (N, 512, 38, 38)
-        p3_feats = p3_feats * self.rescale_factors  # (N, 512, 38, 38)
+        p3_feats = p3_feats / norm  # (N, 256, 38, 38)
+        p3_feats = p3_feats * self.rescale_factors  # (N, 256, 38, 38)
         # (PyTorch autobroadcasts singleton dimensions during arithmetic)
 
         # Run prediction convolutions (predict offsets w.r.t prior-boxes and classes in each resulting localization box)
         locs, classes_scores = self.pred_convs(p3_feats, p4_feats, p5_feats, p6_feats, p7_feats,
-                                               p8_feats, p9_feats)  # (N, 8732, 4), (N, 8732, n_classes)
+                                               p8_feats, p9_feats)  # (N, 8478, 4), (N, 8478, n_classes)
 
         return locs, classes_scores
 
     def create_prior_boxes(self):
         """
-        Create the 8732 prior (default) boxes for the SSD300, as defined in the paper.
-        :return: prior boxes in center-size coordinates, a tensor of dimensions (8732, 4)
+        Create the 8478 prior (default) boxes for the SSD300
+        :return: prior boxes in center-size coordinates, a tensor of dimensions (8478, 4)
         """
         fmap_dims = {'p3': 38,
                      'p4': 19,
@@ -103,17 +101,17 @@ class SSD300(nn.Module):
                                 additional_scale = 1.
                             prior_boxes.append([cx, cy, additional_scale, additional_scale])
 
-        prior_boxes = torch.FloatTensor(prior_boxes).to(device)  # (8732, 4)
-        prior_boxes.clamp_(0, 1)  # (8732, 4)
+        prior_boxes = torch.FloatTensor(prior_boxes).to(device)  # (8478, 4)
+        prior_boxes.clamp_(0, 1)  # (8478, 4)
 
         return prior_boxes
 
     def detect_objects(self, predicted_locs, predicted_scores, min_score, max_overlap, top_k):
         """
-        Decipher the 8732 locations and class scores (output of ths SSD300) to detect objects.
+        Decipher the 8478 locations and class scores (output of ths SSD300) to detect objects.
         For each class, perform Non-Maximum Suppression (NMS) on boxes that are above a minimum threshold.
-        :param predicted_locs: predicted locations/boxes w.r.t the 8732 prior boxes, a tensor of dimensions (N, 8732, 4)
-        :param predicted_scores: class scores for each of the encoded locations/boxes, a tensor of dimensions (N, 8732, n_classes)
+        :param predicted_locs: predicted locations/boxes w.r.t the 8478 prior boxes, a tensor of dimensions (N, 8478, 4)
+        :param predicted_scores: class scores for each of the encoded locations/boxes, a tensor of dimensions (N, 8478, n_classes)
         :param min_score: minimum threshold for a box to be considered a match for a certain class
         :param max_overlap: maximum overlap two boxes can have so that the one with the lower score is not suppressed via NMS
         :param top_k: if there are a lot of resulting detection across all classes, keep only the top 'k'
@@ -121,7 +119,7 @@ class SSD300(nn.Module):
         """
         batch_size = predicted_locs.size(0)
         n_priors = self.priors_cxcy.size(0)
-        predicted_scores = F.softmax(predicted_scores, dim=2)  # (N, 8732, n_classes)
+        predicted_scores = F.softmax(predicted_scores, dim=2)  # (N, 8478, n_classes)
 
         # Lists to store final predicted boxes, labels, and scores for all images
         all_images_boxes = list()
@@ -132,24 +130,24 @@ class SSD300(nn.Module):
 
         for i in range(batch_size):
             # Decode object coordinates from the form we regressed predicted boxes to
-            decoded_locs = cxcy_to_xy(gcxgcy_to_cxcy(predicted_locs[i], self.priors_cxcy))  # (8732, 4), these are fractional pt. coordinates
+            decoded_locs = cxcy_to_xy(gcxgcy_to_cxcy(predicted_locs[i], self.priors_cxcy))  # (8478, 4), these are fractional pt. coordinates
 
             # Lists to store boxes and scores for this image
             image_boxes = list()
             image_labels = list()
             image_scores = list()
 
-            max_scores, best_label = predicted_scores[i].max(dim=1)  # (8732)
+            max_scores, best_label = predicted_scores[i].max(dim=1)  
 
             # Check for each class
             for c in range(1, self.n_classes):
                 # Keep only predicted boxes and scores where scores for this class are above the minimum score
-                class_scores = predicted_scores[i][:, c]  # (8732)
-                score_above_min_score = class_scores > min_score  # torch.uint8 (byte) tensor, for indexing
+                class_scores = predicted_scores[i][:, c]  
+                score_above_min_score = class_scores > min_score  
                 n_above_min_score = score_above_min_score.sum().item()
                 if n_above_min_score == 0:
                     continue
-                class_scores = class_scores[score_above_min_score]  # (n_qualified), n_min_score <= 8732
+                class_scores = class_scores[score_above_min_score]  # (n_qualified), n_min_score <= 8478
                 class_decoded_locs = decoded_locs[score_above_min_score]  # (n_qualified, 4)
 
                 # Sort predicted boxes and scores by scores
@@ -256,11 +254,6 @@ class MultiBoxLoss(nn.Module):
             # For each prior, find the object that has the maximum overlap
             overlap_for_each_prior, object_for_each_prior = overlap.max(dim=0)  # (8732)
 
-            # We don't want a situation where an object is not represented in our positive (non-background) priors -
-            # 1. An object might not be the best object for all priors, and is therefore not in object_for_each_prior.
-            # 2. All priors with the object may be assigned as background based on the threshold (0.5).
-
-            # To remedy this -
             # First, find the prior that has the maximum overlap for each object.
             _, prior_for_each_object = overlap.max(dim=1)  # (N_o)
 
@@ -289,15 +282,7 @@ class MultiBoxLoss(nn.Module):
         # Localization loss is computed only over positive (non-background) priors
         loc_loss = self.smooth_l1(predicted_locs[positive_priors], true_locs[positive_priors])  # (), scalar
 
-        # Note: indexing with a torch.uint8 (byte) tensor flattens the tensor when indexing is across multiple dimensions (N & 8732)
-        # So, if predicted_locs has the shape (N, 8732, 4), predicted_locs[positive_priors] will have (total positives, 4)
-
         # CONFIDENCE LOSS
-
-        # Confidence loss is computed over positive priors and the most difficult (hardest) negative priors in each image
-        # That is, FOR EACH IMAGE,
-        # we will take the hardest (neg_pos_ratio * n_positives) negative priors, i.e where there is maximum loss
-        # This is called Hard Negative Mining - it concentrates on hardest negatives in each image, and also minimizes pos/neg imbalance
 
         # Number of positive and hard-negative priors per image
         n_positives = positive_priors.sum(dim=1)  # (N)

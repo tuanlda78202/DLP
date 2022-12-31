@@ -38,18 +38,6 @@ class FPNBase(nn.Module):
         
         self.smooth1 = nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1)
         self.smooth2 = nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1)
-        
-        # Initialize convolutions' parameters
-#         self.init_conv2d()
-
-#     def init_conv2d(self):
-#         """
-#         Initialize convolution parameters.
-#         """
-#         for c in self.children():
-#             if isinstance(c, nn.Conv2d):
-#                 nn.init.xavier_uniform_(c.weight)
-#                 nn.init.constant_(c.bias, 0.)
             
     def _upsample_add(self, x, y):
         '''Upsample and add two feature maps.
@@ -76,7 +64,6 @@ class FPNBase(nn.Module):
         """
         Forward propagation.
         :param image: images, a tensor of dimensions (N, 3, 300, 300)
-        :return: lower-level feature maps p2 and p3
         """
         # bottom-up pathway
         h = F.relu(self.resnet.bn1(self.resnet.conv1(x))) # C = 64
