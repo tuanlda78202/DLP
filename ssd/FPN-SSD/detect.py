@@ -1,7 +1,7 @@
 from torchvision import transforms
 import torch
 from PIL import Image, ImageDraw, ImageFont
-
+from utils.utils import vis_image
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
@@ -90,12 +90,3 @@ def detect(original_image, min_score, max_overlap, top_k, suppress=None):
                     continue
     vis_image(original_image, det_boxes, det_labels, scores=det_scores[0])
 
-
-if __name__ == '__main__':
-#     img_path = '/media/ssd/ssd data/VOC2007/JPEGImages/000001.jpg'
-#     original_image = Image.open(img_path, mode='r')
-    id = ['2008_000090', '2008_000107', '2008_000115', '2008_000116', '2008_000119', '2008_000120', '2008_000123', '2008_000133', '2008_000134', '2008_000138', '2008_000140', '2008_000145', '2008_000149', '2008_000163', '2008_000174', '2008_000177', '2008_000182', '2008_000183', '2008_000190', '2008_000194', '2008_000195', '2008_000203', '2008_000204', '2008_000213', '2008_000215', '2008_000219', '2008_000222']
-    for id in id:
-        original_image = test_image_dict[id]
-        original_image = original_image.convert('RGB')
-        detect(original_image, min_score=0.2, max_overlap=0.5, top_k=200)
