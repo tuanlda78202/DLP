@@ -1,5 +1,6 @@
 # References
-
+https://github.com/zylo117/Yet-Another-EfficientDet-Pytorch : use this tool for implement EfficientDet-DO.
+https://github.com/yukkyo/voc2coco: convert PASCAL VOC format into COCO format.
 
 # Model Zoo
 
