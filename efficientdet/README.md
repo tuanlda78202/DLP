@@ -29,14 +29,14 @@ I provide finetuned EfficientDet-D0 models, and plan to include more in future. 
       <td>30</td>
       <td>3:03:00</td>
       <td>T4</td>
-      <td><b>67.5<b></td>
-      <td>50.1</td>
-      <td>47.3</td>
-      <td>10.7</td>
-      <td>30.2</td>
-      <td>59.5</td>
+      <td><b>66.4<b></td>
+      <td>50.7</td>
+      <td>46.5</td>
+      <td>11.5</td>
+      <td>32.8</td>
+      <td>55.8</td>
       <td><a href="https://drive.google.com/file/d/1-Pm-eDlvVr0Is4dx1LkcGobhsFIPb4RT/view?usp=share_link">model</a>&nbsp;|&nbsp;<a href="https://drive.google.com/file/d/1-YHYYsRtEyR9uitMui24p0qEyfZxgTKS/view?usp=share_link">logs</a></td>
-      <td>474,1 MB</td>
+      <td> </td>
     </tr>
   </tbody>
 </table>
