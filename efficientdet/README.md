@@ -27,8 +27,8 @@ I provide finetuned EfficientDet-D0 models, and plan to include more in future. 
       <td>EfficientDet-D0 Finetuned</td>
       <td>EfficientNet-B0</td>
       <td>30</td>
-      <td></td>
-      <td>A100</td>
+      <td>3:03:00</td>
+      <td>T4</td>
       <td><b>67.5<b></td>
       <td>50.1</td>
       <td>47.3</td>
