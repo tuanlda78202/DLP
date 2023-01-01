@@ -35,8 +35,8 @@ I provide finetuned EfficientDet-D0 models, and plan to include more in future. 
       <td>11.5</td>
       <td>32.8</td>
       <td>55.8</td>
-      <td><a href="https://drive.google.com/file/d/1-Pm-eDlvVr0Is4dx1LkcGobhsFIPb4RT/view?usp=share_link">model</a>&nbsp;|&nbsp;<a href="https://drive.google.com/file/d/1-YHYYsRtEyR9uitMui24p0qEyfZxgTKS/view?usp=share_link">logs</a></td>
-      <td> </td>
+      <td><a href="https://drive.google.com/drive/folders/1lM-eje22vDFINddRLqJMKipC2ALVs77H">model</a>&nbsp;
+      <td> 15 MB</td>
     </tr>
   </tbody>
 </table>
