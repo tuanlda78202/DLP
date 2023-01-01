@@ -24,10 +24,10 @@ I provide finetuned EfficientDet-D0 models, and plan to include more in future. 
   <tbody>
     <tr>
       <th>0</th>
-      <td>DETR-R50 Finetuned</td>
-      <td>DETR-R50R</td>
-      <td>40</td>
-      <td>4:03:58</td>
+      <td>EfficientDet-D0 Finetuned</td>
+      <td>EfficientNet-B0</td>
+      <td>30</td>
+      <td></td>
       <td>A100</td>
       <td><b>67.5<b></td>
       <td>50.1</td>
