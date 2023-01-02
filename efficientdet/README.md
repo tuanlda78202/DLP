@@ -13,16 +13,12 @@ I provide finetuned EfficientDet-D0 models, and plan to include more in future. 
       <th>name</th>
       <th>backbone</th>
       <th>schedule</th>
-      <th>training time</th>
-      <th>gpu training</th>
       <th>AP@0.5</th>
       <th>AP@0.75</th>
       <th>AP@0.5:0.95</th>
       <th>AP@small</th>
       <th>AP@medium</th>
       <th>AP@large</th>
-      <th>url</th>
-      <th>size</th>
     </tr>
   </thead>
   <tbody>
@@ -31,16 +27,12 @@ I provide finetuned EfficientDet-D0 models, and plan to include more in future. 
       <td>EfficientDet-D0 Finetuned</td>
       <td>EfficientNet-B0</td>
       <td>30</td>
-      <td>3:03:00</td>
-      <td>T4</td>
       <td><b>66.4<b></td>
       <td>50.7</td>
       <td>46.5</td>
       <td>11.5</td>
       <td>32.8</td>
       <td>55.8</td>
-      <td><a href="https://drive.google.com/drive/folders/1lM-eje22vDFINddRLqJMKipC2ALVs77H">checkpoint</a>&nbsp;
-      <td> 15 MB</td>
     </tr>
   </tbody>
 </table>

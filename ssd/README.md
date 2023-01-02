@@ -28,8 +28,49 @@ model = model.to(device)
 image = Image.open(image_file).convert('RGB') 
 detect(image, min_score=0.25, max_overlap=0.5, top_k=200)
 ```
-
 ## Results
+AP is computed on PASVOC 2012val
+
+<table>
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>backbone</th>
+      <th>schedule</th>
+      <th>training time</th>
+      <th>gpu training</th>
+      <th>AP@0.5</th>
+      <th>AP@0.75</th>
+      <th>AP@0.5:0.95</th>
+      <th>AP@small</th>
+      <th>AP@medium</th>
+      <th>AP@large</th>
+      <th>url</th>
+      <th>size</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>FPN-SSD</td>
+      <td>Fpn-resnet50</td>
+      <td>280</td>
+      <td></td>
+      <td>P100</td>
+      <td>63.8</td>
+      <td>51.8</td>
+      <td>35.6</td>
+      <td><b>14.3<b></td>
+      <td></td>
+      <td></td>
+      <td><a href="https://drive.google.com/file/d/1IiJEYI58f4nTyFmca-mdZ2V1hpF5T7lG/view?usp=sharing">model</a>&nbsp</td>
+      <td>267 MB</td>
+    </tr>
+  </tbody>
+</table>
+
+## Examples
 Below are some detection results:
 
 ![Dec1](https://github.com/tuanlda78202/DLP/blob/master/ssd/FPN-SSD/detected_img/detect1.png "Detection 1")
