@@ -59,7 +59,7 @@ AP is computed on PASVOC 2012val
       <td></td>
       <td>P100</td>
       <td>63.8</td>
-      <td>51.8</td>
+      <td>35.0</td>
       <td>35.6</td>
       <td><b>14.3<b></td>
       <td></td>
