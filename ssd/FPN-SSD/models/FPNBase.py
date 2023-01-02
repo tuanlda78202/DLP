@@ -16,9 +16,7 @@ class FPNBase(nn.Module):
     def __init__(self):
         super(FPNBase, self).__init__()
         
-#         self.resnet = resnet50(pretrained = False, progress = True)
         self.resnet = resnet50(pretrained = True, progress = True)
-        # Standard convolutional layers in VGG16
         self.toplayer = nn.Conv2d(2048, 256, kernel_size=3, stride = 1, padding=0).to(device)  # stride = 1, by default
 
         # lateral connection

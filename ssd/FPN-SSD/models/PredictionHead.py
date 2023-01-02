@@ -115,8 +115,7 @@ class PredictionConvolutions(nn.Module):
 
         c_p4 = self.cl_p4(p4_feats)  # (N, 6 * n_classes, 19, 19)
         c_p4 = c_p4.permute(0, 2, 3, 1).contiguous()  # (N, 19, 19, 6 * n_classes)
-        c_p4 = c_p4.view(batch_size, -1,
-                               self.n_classes)  # (N, 2166, n_classes), there are a total 2116 boxes on this feature map
+        c_p4 = c_p4.view(batch_size, -1, self.n_classes)  # (N, 2166, n_classes), there are a total 2116 boxes on this feature map
 
         c_p5 = self.cl_p5(p5_feats)  # (N, 6 * n_classes, 8, 8)
         c_p5 = c_p5.permute(0, 2, 3, 1).contiguous()  # (N, 10, 10, 6 * n_classes)
@@ -138,7 +137,7 @@ class PredictionConvolutions(nn.Module):
         c_p9 = c_p9.permute(0, 2, 3, 1).contiguous()  # (N, 1, 1, 16)
         c_p9 = c_p9.view(batch_size, -1, self.n_classes)  # (N, 4, n_classes)
 
-        # A total of 8732 boxes
+        # A total of 8478 boxes
         # Concatenate in this specific order (i.e. must match the order of the prior-boxes)
         locs = torch.cat([l_p3, l_p4, l_p5, l_p6, l_p7, l_p8, l_p9], dim=1)  # (N, 8478, 4)
         classes_scores = torch.cat([c_p3, c_p4, c_p5, c_p6, c_p7, c_p8, c_p9], dim=1)  # (N, 8478, n_classes)
