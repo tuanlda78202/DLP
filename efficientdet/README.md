@@ -19,8 +19,6 @@ I provide finetuned EfficientDet-D0 models, and plan to include more in future. 
       <th>AP@small</th>
       <th>AP@medium</th>
       <th>AP@large</th>
-      <th>url</th>
-      <th>size</th>
     </tr>
   </thead>
   <tbody>
@@ -35,8 +33,6 @@ I provide finetuned EfficientDet-D0 models, and plan to include more in future. 
       <td>11.5</td>
       <td>32.8</td>
       <td>55.8</td>
-      <td><a href="https://drive.google.com/drive/folders/1lM-eje22vDFINddRLqJMKipC2ALVs77H">checkpoint</a>&nbsp;
-      <td> 15 MB</td>
     </tr>
   </tbody>
 </table>
